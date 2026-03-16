@@ -34,10 +34,11 @@ def check_guess(guess, secret):
         return "Win", "🎉 Correct!"
 
     try:
+        # FIXME: Hint messages are reversed. "Too High" should suggest going LOWER.
         if guess > secret:
-            return "Too High", "📈 Go HIGHER!"
+            return "Too High", "📉 Go LOWER!"
         else:
-            return "Too Low", "📉 Go LOWER!"
+            return "Too Low", "📈 Go HIGHER!"
     except TypeError:
         g = str(guess)
         if g == secret:
@@ -156,11 +157,8 @@ if submit:
         st.error(err)
     else:
         st.session_state.history.append(guess_int)
-
-        if st.session_state.attempts % 2 == 0:
-            secret = str(st.session_state.secret)
-        else:
-            secret = st.session_state.secret
+        # FIXME: Converting secret to string causes incorrect comparisons in check_guess. The hints are based on string comparison, not numeric.
+        secret = st.session_state.secret
 
         outcome, message = check_guess(guess_int, secret)
 
