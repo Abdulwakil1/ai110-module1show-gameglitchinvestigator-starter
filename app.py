@@ -103,9 +103,7 @@ if submit:
         secret = st.session_state.secret
 
         outcome, message = check_guess(guess_int, secret)
-
-        if show_hint:
-            st.warning(message)
+        st.session_state.last_message = message
 
         st.session_state.score = update_score(
             current_score=st.session_state.score,
@@ -128,6 +126,9 @@ if submit:
                     f"The secret was {st.session_state.secret}. "
                     f"Score: {st.session_state.score}"
                 )
+
+if show_hint and "last_message" in st.session_state:
+    st.warning(st.session_state.last_message)
 
 remaining_attempts = max(0, attempt_limit - st.session_state.attempts)
 info_placeholder.info(
