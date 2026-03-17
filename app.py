@@ -80,6 +80,7 @@ if new_game:
     st.session_state.secret = random.randint(low, high)
     st.session_state.status = "playing"
     st.session_state.history = []
+    st.session_state.pop("last_message", None)
     st.rerun()
 
 if st.session_state.status != "playing":
@@ -114,6 +115,7 @@ if submit:
         if outcome == "Win":
             st.balloons()
             st.session_state.status = "won"
+            st.session_state.pop("last_message", None)
             st.success(
                 f"You won! The secret was {st.session_state.secret}. "
                 f"Final score: {st.session_state.score}"
@@ -121,13 +123,14 @@ if submit:
         else:
             if st.session_state.attempts >= attempt_limit:
                 st.session_state.status = "lost"
+                st.session_state.pop("last_message", None)
                 st.error(
                     f"Out of attempts! "
                     f"The secret was {st.session_state.secret}. "
                     f"Score: {st.session_state.score}"
                 )
 
-if show_hint and "last_message" in st.session_state:
+if show_hint and st.session_state.status == "playing" and "last_message" in st.session_state:
     st.warning(st.session_state.last_message)
 
 remaining_attempts = max(0, attempt_limit - st.session_state.attempts)
