@@ -38,7 +38,7 @@ if "secret" not in st.session_state or st.session_state.get("last_difficulty") !
     st.session_state.last_difficulty = difficulty
 
 if "attempts" not in st.session_state:
-    st.session_state.attempts = 1
+    st.session_state.attempts = 0
 
 if "score" not in st.session_state:
     st.session_state.score = 0
