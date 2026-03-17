@@ -33,8 +33,9 @@ low, high = get_range_for_difficulty(difficulty)
 st.sidebar.caption(f"Range: {low} to {high}")
 st.sidebar.caption(f"Attempts allowed: {attempt_limit}")
 
-if "secret" not in st.session_state:
+if "secret" not in st.session_state or st.session_state.get("last_difficulty") != difficulty:
     st.session_state.secret = random.randint(low, high)
+    st.session_state.last_difficulty = difficulty
 
 if "attempts" not in st.session_state:
     st.session_state.attempts = 1
@@ -50,11 +51,7 @@ if "history" not in st.session_state:
 
 st.subheader("Make a guess")
 
-remaining_attempts = max(0, attempt_limit - st.session_state.attempts)
-st.info(
-    f"Guess a number between {low} and {high}. "
-    f"Attempts left: {remaining_attempts}"
-)
+info_placeholder = st.empty()  # filled after submit logic so attempts is up to date
 
 with st.expander("Developer Debug Info"):
     st.write("Secret:", st.session_state.secret)
@@ -130,6 +127,12 @@ if submit:
                     f"The secret was {st.session_state.secret}. "
                     f"Score: {st.session_state.score}"
                 )
+
+remaining_attempts = max(0, attempt_limit - st.session_state.attempts)
+info_placeholder.info(
+    f"Guess a number between {low} and {high}. "
+    f"Attempts left: {remaining_attempts}"
+)
 
 st.divider()
 st.caption("Built by an AI that claims this code is production-ready.")
