@@ -78,7 +78,8 @@ with col3:
 if new_game:
     st.session_state.attempts = 0
     st.session_state.secret = random.randint(low, high)
-    st.success("New game started.")
+    st.session_state.status = "playing"
+    st.session_state.history = []
     st.rerun()
 
 if st.session_state.status != "playing":
